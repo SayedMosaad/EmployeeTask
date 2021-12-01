@@ -35,6 +35,7 @@ namespace EmployeeTask.Repositories
                 Salt=salt,
                 UserName=model.UserName,
                 Name = model.Name,
+                RoleId=model.RoleId,
                 CreatedOnUTC = DateTime.UtcNow
             };
 
@@ -46,6 +47,7 @@ namespace EmployeeTask.Repositories
                 UserId = user.Id,
                 Email = user.Email,
                 Name = user.Name,
+                RoleId=user.RoleId,
                 CreatedUtc = user.CreatedOnUTC
             };
         }
@@ -60,6 +62,7 @@ namespace EmployeeTask.Repositories
             {
                 UserId = m.Id,
                 Email = m.Email,
+                RoleId=m.RoleId,
                 CreatedUtc = m.CreatedOnUTC
             });
 

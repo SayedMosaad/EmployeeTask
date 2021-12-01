@@ -19,4 +19,15 @@ namespace EmployeeTask.Models
         public int SubSectionId { get; set; }
         public SubSection SubSection { get; set; }
     }
+
+    public class EmployeeVm
+    {
+        public IEnumerable<Employee> Employees { get; set; }
+
+        public Employee Employee { get; set; }
+        [Required]
+        public int DepartmentId { get; set; }
+        [Required]
+        public int SectionId { get; set; }
+    }
 }

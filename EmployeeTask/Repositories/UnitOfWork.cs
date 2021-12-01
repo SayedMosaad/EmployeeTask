@@ -17,12 +17,20 @@ namespace EmployeeTask.Repositories
             Employee = new EmployeeRepository(_db);
             User = new UserRepository(_db);
             UserManger = new UserManager();
+            Role = new RoleRepository(_db);
+            Department = new DepartmentRepository(_db);
+            Section = new SectionRepository(_db);
+            SubSection = new SubSectionRepository(_db);
         }
 
         public IEmployeeRepository Employee { get; private set; }
+        public IDepartmentRepository Department { get; private set; }
+        public ISectionRepository Section { get; private set; }
+        public ISubSectionRepository SubSection { get; private set; }
 
         public IUserRepository User { get; private set; }
         public IUserManger UserManger { get; private set; }
+        public IRoleRepository Role { get; private set; }
 
 
         public void Dispose()

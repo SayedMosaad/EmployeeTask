@@ -35,6 +35,8 @@ namespace EmployeeTask.Models
     {
         [Required, Compare("Password")]
         public string ConfirmPassword { get; set; }
+        [Required]
+        public int RoleId { get; set; }
     }
 
     
@@ -44,6 +46,8 @@ namespace EmployeeTask.Models
         public Guid UserId { get; set; }
         public string Email { get; set; }
         public string Name { get; set; }
+        public int RoleId { get; set; }
+        public Role Role { get; set; }
         public DateTime CreatedUtc { get; set; } = DateTime.UtcNow;
     }
 }

@@ -1,0 +1,59 @@
+﻿@model EmployeeVm
+
+<form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group row">
+        <label asp-for="Employee.Name" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+
+            <input asp-for="Employee.Name" class="form-control" />
+            <span asp-validation-for="Employee.Name" class="text-danger"></span>
+        </div>
+    </div>
+    <input type="hidden" asp-for="Employee.Id" />
+    <div class="form-group row">
+        <label asp-for="Employee.HireDate" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            @*<input asp-for="Employee.HireDate" class="form-control" />*@
+            <input type="text" asp-for="Employee.HireDate" class="form-control date" placeholder="mm/dd/yyyy">
+            <span asp-validation-for="Employee.HireDate" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Employee.Salary" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="Employee.Salary" class="form-control" />
+            <span asp-validation-for="Employee.Salary" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Department</label>
+        <div class="col-sm-10">
+            <select class="form-control" id="DepartmentId2" required asp-items="ViewBag.DepartmentId">
+                <option value=""> Select Department</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label"> Section</label>
+        <div class="col-sm-10">
+            <select class="form-control" id="SectionId2" required asp-items="ViewBag.SectionId">
+                <option value=""> Select Section</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" asp-for="Employee.SubSectionId"></label>
+        <div class="col-sm-10">
+            <select class="form-control " id="SubSectionId2" asp-for="Employee.SubSectionId" asp-items="ViewBag.SubSectionId">
+                <option value=""> Select Section</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-10">
+            <input type="submit" value="Create" class="btn btn-primary w-100" />
+        </div>
+    </div>
+</form>

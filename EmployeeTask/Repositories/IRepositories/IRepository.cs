@@ -8,6 +8,7 @@ namespace EmployeeTask.Repositories.IRepositories
     public interface IRepository<T> where T : class
     {
         Task<IEnumerable<T>> GetAll();
+        IQueryable<T> GetAllAsQueryable();
         Task<T> Find(int id);
         Task<bool> Add(T entity);
         Task<bool> Delete(int id);

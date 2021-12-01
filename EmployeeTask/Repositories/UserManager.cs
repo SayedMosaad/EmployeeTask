@@ -61,6 +61,7 @@ namespace EmployeeTask.Repositories
             List<Claim> claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()));
             claims.Add(new Claim(ClaimTypes.Email, user.Email));
+            claims.Add(new Claim(ClaimTypes.Role, user.RoleId.ToString()));
             return claims;
         }
 

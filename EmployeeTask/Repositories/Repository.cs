@@ -41,7 +41,15 @@ namespace EmployeeTask.Repositories
         public async Task<IEnumerable<T>> GetAll()
         {
             IQueryable<T> query = dbSet;
+            
             return await query.ToListAsync();
+
+        }
+        public IQueryable<T> GetAllAsQueryable()
+        {
+            IQueryable<T> query = dbSet;
+            
+            return query.AsNoTracking();
 
         }
 

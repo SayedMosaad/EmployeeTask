@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>@ViewData["Title"]</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/images/favicon.png">
     <!-- Pignose Calender -->
     <link href="~/plugins/pg-calendar/css/pignose.calendar.min.css" rel="stylesheet">
     <!-- Chartist -->
@@ -17,6 +17,7 @@
     <link href="~/css/style.css" rel="stylesheet">
     <link href="~/lib/datatable/css/datatable.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+    <link href="~/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" />
 
 </head>
 
@@ -95,12 +96,18 @@
                                 <div class="drop-down dropdown-profile animated fadeIn dropdown-menu">
                                     <div class="dropdown-content-body">
                                         <ul>
-                                            <li><a asp-controller="Account" asp-action="Logout"><i class="icon-key"></i> <span>Logout</span></a></li>
+                                            <li><a asp-controller="Account" asp-action="Logout"><i class="btn btn-sm btn-outer-primary"></i> <span>Logout</span></a></li>
                                         </ul>
                                     </div>
                                 </div>
                             </li>
                         </ul>
+                    </div>
+                }
+                else
+                {
+                    <div class="header-right">
+                        <a asp-controller="Account" asp-action="Login"><i class="icon-key"></i> <span>Login</span></a>
                     </div>
                 }
 
@@ -191,12 +198,12 @@
     <script src="~/plugins/chartist-plugin-tooltips/js/chartist-plugin-tooltip.min.js"></script>
     <script src="~/lib/datatable/js/datatable.js"></script>
 
-
+    <script src="~/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
     <script src="~/js/dashboard/dashboard-1.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
+    <partial name="_ValidationScriptsPartial" />
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 
