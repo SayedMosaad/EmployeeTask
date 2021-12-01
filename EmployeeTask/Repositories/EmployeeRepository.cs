@@ -23,9 +23,8 @@ namespace EmployeeTask.Repositories
 
         public async Task<bool> Update(Employee employee)
         {
-            var emp = await Find(employee.Id);
             _db.Entry(employee).State = EntityState.Modified;
-            await _db.SaveChangesAsync();
+            _db.SaveChanges();
             return true;
         }
     }

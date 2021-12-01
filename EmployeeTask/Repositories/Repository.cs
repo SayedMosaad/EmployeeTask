@@ -21,6 +21,7 @@ namespace EmployeeTask.Repositories
         public async Task<bool> Add(T entity)
         {
             await dbSet.AddAsync(entity);
+
             await _db.SaveChangesAsync();
             return true;
         }

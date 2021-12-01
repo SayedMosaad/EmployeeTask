@@ -1,4 +1,5 @@
-﻿using EmployeeTask.Models;
+﻿using EmployeeTask.Data;
+using EmployeeTask.Models;
 using EmployeeTask.Repositories.IRepositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,24 +12,45 @@ using System.Threading.Tasks;
 
 namespace EmployeeTask.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class EmployeesController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ApplicationDbContext _db;
 
-        public EmployeesController(IUnitOfWork unitOfWork)
+        public EmployeesController(IUnitOfWork unitOfWork, ApplicationDbContext db)
         {
             _unitOfWork = unitOfWork;
+            _db = db;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int DepartmentId, int SectionId, int SubSectionId, string Name)
         {
-            var employees = await _unitOfWork.Employee.GetAllAsQueryable().Include(e=>e.SubSection).ThenInclude(e=>e.Section).ThenInclude(e=>e.Department).ToListAsync();
+            var employees = Enumerable.Empty<Employee>();
+           if(string.IsNullOrEmpty(Name))
+            {
+                employees = await _unitOfWork.Employee.GetAllAsQueryable()
+                .Include(e => e.SubSection).ThenInclude(e => e.Section).ThenInclude(e => e.Department)
+                .Where(e => ((DepartmentId == 0 || e.SubSection.Section.DepartmentId == DepartmentId)
+                            && (SectionId == 0 || e.SubSection.SectionId == SectionId)
+                            && (SubSectionId == 0 || e.SubSectionId == SubSectionId))).ToListAsync();
+            }
+           else
+            {
+                employees = await _unitOfWork.Employee.GetAllAsQueryable()
+                    .Include(e => e.SubSection).ThenInclude(e => e.Section).ThenInclude(e => e.Department)
+                    .Where(e => ((e.Name.Contains(Name))
+                                &&(DepartmentId == 0 || e.SubSection.Section.DepartmentId == DepartmentId)
+                                && (SectionId == 0 || e.SubSection.SectionId == SectionId)
+                                && (SubSectionId == 0 || e.SubSectionId == SubSectionId))).ToListAsync();
+            }
             var model = new EmployeeVm
             {
                 Employees = employees
             };
             ViewData["DepartmentId"] = new SelectList(await _unitOfWork.Department.GetAll(), "Id", "Name");
+            ViewData["SectionId"] = new SelectList(await _unitOfWork.Section.GetAll(), "Id", "Name");
+            ViewData["SubSectionId"] = new SelectList(await _unitOfWork.SubSection.GetAll(), "Id", "Name");
             return View(model);
         }
 
@@ -60,7 +82,7 @@ namespace EmployeeTask.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var employee = await _unitOfWork.Employee.Find(id);
+            var employee = await _unitOfWork.Employee.GetAllAsQueryable().Where(e=>e.Id==id).Include(e=>e.SubSection).AsNoTracking().FirstOrDefaultAsync();
             if(employee==null)
             {
                 return NotFound();
@@ -103,16 +125,17 @@ namespace EmployeeTask.Controllers
         [HttpPost]
         public async Task<IActionResult> EditEmployee(int id)
         {
-            var employee = await _unitOfWork.Employee.GetAllAsQueryable().Where(e=>e.Id==id).AsNoTracking().FirstOrDefaultAsync();
-            
+            var employee = await _unitOfWork.Employee.GetAllAsQueryable().Where(e => e.Id == id).Include(e => e.SubSection).ThenInclude(e => e.Section).ThenInclude(e => e.Department).AsNoTracking().FirstOrDefaultAsync();
             var model = new EmployeeVm
             {
-                Employee = employee
+                Employee = employee,
+                DepartmentId=employee.SubSection.Section.DepartmentId,
+                SectionId=employee.SubSection.SectionId
                 
             };
-            ViewData["DepartmentId"] = new SelectList(await _unitOfWork.Department.GetAll(), "Id", "Name");
-            ViewData["SectionId"] = new SelectList(await _unitOfWork.Section.GetAllAsQueryable().ToListAsync(), "Id", "Name");
-            ViewData["SubSectionId"] = new SelectList(await _unitOfWork.SubSection.GetAllAsQueryable().ToListAsync(), "Id", "Name");
+            ViewData["DepartmentId"] = new SelectList(await _unitOfWork.Department.GetAll(), "Id", "Name",model.DepartmentId);
+            ViewData["SectionId"] = new SelectList(await _unitOfWork.Section.GetAllAsQueryable().Where(e=>e.DepartmentId==model.DepartmentId).ToListAsync(), "Id", "Name",model.SectionId);
+            ViewData["SubSectionId"] = new SelectList(await _unitOfWork.SubSection.GetAllAsQueryable().Where(e=>e.SectionId==model.SectionId).ToListAsync(), "Id", "Name",model.Employee.SubSectionId);
             return PartialView("_editView", model);
         }
 
