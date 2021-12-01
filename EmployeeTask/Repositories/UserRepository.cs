@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeTask.Repositories
 {
@@ -30,7 +31,6 @@ namespace EmployeeTask.Repositories
             var user = new User
             {
                 Id = Guid.NewGuid(),
-                Email = model.Email,
                 PasswordHash = hashedPassword.ToString(),
                 Salt=salt,
                 UserName=model.UserName,
@@ -42,27 +42,29 @@ namespace EmployeeTask.Repositories
             await _db.Users.AddAsync(user);
             await _db.SaveChangesAsync();
 
+            var createduser = await _db.Users.Include(e=>e.Roles).FirstOrDefaultAsync(e => e.Id == user.Id);
             return new UserItem
             {
                 UserId = user.Id,
-                Email = user.Email,
-                Name = user.Name,
+                UserName = user.UserName,
                 RoleId=user.RoleId,
+                Role= createduser.Roles.Name,
                 CreatedUtc = user.CreatedOnUTC
             };
         }
 
         public async Task<UserItem> Validate(LoginVm model)
         {
-            var emailRecords = _db.Users.Where(x => x.Email == model.Email);
+            var emailRecords = _db.Users.Where(x => x.UserName == model.UserName).Include(e=>e.Roles);
 
             var results = emailRecords.AsEnumerable()
             .Where(m => m.PasswordHash == Hasher.GenerateHash(model.Password, m.Salt))
             .Select(m => new UserItem
             {
                 UserId = m.Id,
-                Email = m.Email,
+                UserName = m.UserName,
                 RoleId=m.RoleId,
+                Role=m.Roles.Name,
                 CreatedUtc = m.CreatedOnUTC
             });
 

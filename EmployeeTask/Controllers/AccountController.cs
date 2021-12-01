@@ -1,4 +1,5 @@
-﻿using EmployeeTask.Models;
+﻿using EmployeeTask.Data;
+using EmployeeTask.Models;
 using EmployeeTask.Repositories.IRepositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +15,12 @@ namespace EmployeeTask.Controllers
     public class AccountController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ApplicationDbContext _db;
 
-        public AccountController( IUnitOfWork unitOfWork)
+        public AccountController(IUnitOfWork unitOfWork, ApplicationDbContext db)
         {
             _unitOfWork = unitOfWork;
+            _db = db;
         }
 
         public IActionResult Login()
@@ -56,8 +59,19 @@ namespace EmployeeTask.Controllers
         public async Task<IActionResult> RegisterAsync(RegisterVm model)
         {
             if (!ModelState.IsValid)
+            {
+                ViewData["RoleId"] = new SelectList(await _unitOfWork.Role.GetAll(), "Id", "Name");
                 return View(model);
+            }
 
+
+            var checkUserName = await _db.Users.Where(e => e.UserName == model.UserName).ToListAsync();
+            if (checkUserName.Count()!=0)
+            {
+                ModelState.AddModelError("UserName", "UserName Already Exist");
+                ViewData["RoleId"] = new SelectList(await _unitOfWork.Role.GetAll(), "Id", "Name");
+                return View(model);
+            }
             var user = await _unitOfWork.User.Register(model);
 
             await _unitOfWork.UserManger.SignIn(this.HttpContext, user, false);

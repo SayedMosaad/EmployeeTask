@@ -23,9 +23,9 @@ namespace EmployeeTask.Models
     public class LoginVm
     {
         public string Name { get; set; }
-        [Required, EmailAddress]
-        public string Email { get; set; }
-
+        //[Required, EmailAddress]
+        //public string Email { get; set; }
+        [Required]
         public string UserName { get; set; }
 
         [Required]
@@ -45,9 +45,9 @@ namespace EmployeeTask.Models
     {
         public Guid UserId { get; set; }
         public string Email { get; set; }
-        public string Name { get; set; }
+        public string UserName { get; set; }
         public int RoleId { get; set; }
-        public Role Role { get; set; }
+        public String Role { get; set; }
         public DateTime CreatedUtc { get; set; } = DateTime.UtcNow;
     }
 }

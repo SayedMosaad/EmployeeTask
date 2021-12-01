@@ -107,7 +107,7 @@
                 else
                 {
                     <div class="header-right">
-                        <a asp-controller="Account" asp-action="Login"><i class="icon-key"></i> <span>Login</span></a>
+                        <a asp-controller="Account" asp-action="Login"><i class="icon-login"></i> <span>Login</span></a>
                     </div>
                 }
 
@@ -122,20 +122,26 @@
         <div class="nk-sidebar">
             <div class="nk-nav-scroll">
                 <ul class="metismenu" id="menu">
-                    <li class="nav-label"><a asp-controller="Home" asp-action="Index">Dashboard</a></li>
+                    <li class="nav-label">Dashboard</li>
                     <!--<li>
-                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                            <i class="icon-speedometer menu-icon"></i><span class="nav-text">Dashboard</span>
-                        </a>
-                        <ul aria-expanded="false">
-                            <li><a asp-controller="Employees" asp-action="Index">Employees</a></li>
-                            <li><a asp-controller="Departments" asp-action="Index">Depatments</a> </li>-->
+        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+            <i class="icon-speedometer menu-icon"></i><span class="nav-text">Dashboard</span>
+        </a>
+        <ul aria-expanded="false">
+            <li><a asp-controller="Employees" asp-action="Index">Employees</a></li>
+            <li><a asp-controller="Departments" asp-action="Index">Depatments</a> </li>-->
                     <!-- <li><a href="./index-2.html">Home 2</a></li> -->
                     <!--</ul>
-                    </li>-->
-                    <li><a asp-controller="Employees" asp-action="Index">Employees</a></li>
-                    <li><a asp-controller="Departments" asp-action="Index">Depatments</a> </li>
-
+    </li>-->
+                    <li>
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon-basic-settings menu-icon"></i> <span class="nav-text">Manage</span>
+                        </a>
+                        <ul aria-expanded="true">
+                            <li><a asp-controller="Employees" asp-action="Index">Employees</a></li>
+                            
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
